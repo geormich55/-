@@ -1,0 +1,26 @@
+[~,nSheets32]  = xlsfinfo('Dataslevhtas.xlsx');
+Levhtas=[];
+
+    N1=nSheets32{1};
+    
+    Levhtas=[Levhtas, xlsread('Dataslevhtas.xlsx',N1)];
+    
+sizeLevh=numel(Levhtas);
+rLevh=numel(Levhtas(:,1));
+cLevh=numel(Levhtas(1,:));
+
+
+for i=1:rLevh
+    cp=(((Levhtas(i,39)*Levhtas(i,40)/3600)-Levhtas(i,41)-Levhtas(i,42))/(Levhtas(i,43)*(Levhtas(i,44))*1000));
+    ((GAS FUEL (Nm3/h)*LHV MJ/NM3)/3.6)-GasTurbine (MW)*1000-(cp*яог йаусаеяиым  kg/s*хеялойяасиа йаусаеяиым енодос кебгта))/((GAS FUEL (Nm3/h)*LHV MJ/NM3)/3.6)-GasTurbine (MW)*1000)
+    
+end
+
+apodwshsumpuknwth=[1;0];
+for i=1:rSump
+    apodwshsumpuknwth(i,1)=(Sumpuknwths(i,5)-Sumpuknwths(i,4))/max;
+end
+
+newData = [Sumpuknwths, apodwshsumpuknwth];  % to append the new column with existing data.
+xlswrite('DATA.xlsx', newData, 'Fullo1', 'A5');  % to write new data into excel sheet.
+winopen('DATA.xlsx');   % to open excel file, just to check.
