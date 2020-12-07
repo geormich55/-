@@ -2,16 +2,11 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from pandas import read_csv
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.wrappers.scikit_learn import KerasRegressor
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score
-seed=1
+# permutation feature importance with knn for regression
+from sklearn.datasets import make_regression
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.inspection import permutation_importance
+from matplotlib import pyplot
 
 #2 Importing the dataset:
 dataset = pd.read_excel(r'C:\Users\Micha\Desktop\Diplwmatikh ELPE\Σχέσεις\Datalevhtas.xlsx', sheet_name='Fullo1')
@@ -62,110 +57,41 @@ for i in range(np.shape(X1.columns)[0]):
 X = X1.loc[:, :].values
 Y = Y1.loc[:, :].values
 
+#3 Encoding the categorical variables:
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder_X = LabelEncoder()
+#5 Splitting the dataset into the Training and Test dataset
+#train_set_split: Split arrays or matrices into random train and #test subsets. %20 of the dataset to the test set
 from sklearn.model_selection import train_test_split
-X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size = 0.1)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+# 6 Fit multiple Linear Regression model to our Train set
+from sklearn.linear_model import LinearRegression
 
-# define the model
-def larger_model():
-# create model
-	model = Sequential()
-	model.add(Dense(13, input_dim=37, kernel_initializer='normal', activation='relu'))
-	model.add(Dense(6, kernel_initializer='normal', activation='relu'))
-	model.add(Dense(1, kernel_initializer='normal'))
-	# Compile model
-	model.compile(loss='mean_squared_error', optimizer='adam')
-	return model
-# evaluate model with standardized dataset
-estimators = []
-estimators.append(('standardize', StandardScaler()))
-estimators.append(('mlp', KerasRegressor(build_fn=larger_model, epochs=50, batch_size=5, verbose=0)))
-pipeline = Pipeline(estimators)
-kfold = KFold(n_splits=10, random_state=seed)
-results = cross_val_score(pipeline, X.astype(float), Y.astype(float), cv=kfold)
-print("Standardized: %.2f (%.2f) MSE" % (results.mean(), results.std()))
-estimator = KerasRegressor(build_fn=larger_model, epochs=100, batch_size=5, verbose=0)
-results2 = cross_val_score(estimator, X.astype(float), Y.astype(float), cv=kfold)
-print("Baseline: %.2f (%.2f) MSE" % (results2.mean(), results2.std()))
+# Fit the linear regression model to the training set… We use the fit #method the arguments of the fit method will be training sets
+model = LinearRegression().fit(X_train, Y_train)
 
-scaler = StandardScaler()
-scaled_Y = scaler.fit_transform(Y)
-scaler.mean_
-scaler1 = StandardScaler()
-scaled_X = scaler1.fit_transform(X1)
-scaler1.mean_
-scx=pd.DataFrame(scaled_X,columns=X1.columns)
-scy=pd.DataFrame(scaled_Y,columns=Y1.columns)
+#Get Results
+r_sq = model.score(X_train, Y_train)
+print('coefficient of determination:', r_sq)
+print('intercept:', model.intercept_)
+print('slope:', model.coef_)
+#Predict response
+y_pred = model.predict(X_test)
+print('predicted response:', y_pred, sep='\n')
+#Predict response with another way
+#d = model.coef_.dot(np.transpose(X_test))
+#y_pred1 = model.intercept_ + np.sum(d.astype('float64'), axis=1)
+#print('predicted response:', y_pred1, sep='\n')
 
-
-pipeline.fit(X.astype(float), Y.astype(float))
-prediction2 = pipeline.predict(X_test.astype(float))
-#accuracy_score(y_test.astype(float), prediction2)
-#print("accuracy is: %.2f" % accuracy_score)
-print("prediction is: %.2f" % prediction2)
-
-y_error = y_test.astype(float) - prediction2.astype(float)
-
-import matplotlib.pyplot as plt
-from sklearn import linear_model
-import numpy as np
-from sklearn.metrics import mean_squared_error, r2_score
-
-p=prediction2.reshape(-1,1)
-print("R2 score : %.2f" % r2_score(y_test, p))
-print("Mean squared error: %.2f" % mean_squared_error(y_test, p))
-
-er = []
-g = 0
-for i in range(len(y_test)):
-     print("actual=", y_test[i], " observed=", p[i])
-     x = (y_test[i] - p[i]) ** 2
-     er.append(x)
-     g = g + x
-
-x = 0
-for i in range(len(er)):
-     x = x + er[i]
-
-print("MSE", x / len(er))
-
-v = np.var(er)
-print("variance", v)
-
-print("average of errors ", np.mean(er))
-
-m = np.mean(y_test)
-print("average of observed values", m)
-
-y = 0
-for i in range(len(y_test)):
-    y = y + ((y_test[i] - m) ** 2)
-
-print("total sum of squares", y)
-print("ẗotal sum of residuals ", g)
-print("r2 calculated", 1 - (g / y))
-
-from sklearn.metrics import r2_score
-r2_score(y_test.astype(float),prediction2.astype(float))
-
-
-print("R2 score : %.2f" % r2_score(y_test, p))
-print("Mean squared error: %.2f" % mean_squared_error(y_test, p))
-
-import numpy as np
-RSS = np.sum((prediction2.astype(float) - y_test.astype(float))**2)
-y_mean = np.mean(y_test.astype(float))
-TSS = np.sum((y_test.astype(float) - y_mean.astype(float))**2)
-R2 = 1 - RSS/TSS
-R2
-
-n=X_test.shape[0]
-p=X_test.shape[1] - 1
-
-adj_rsquared = 1 - (1 - R2) * ((n - 1)/(n-p-1))
-adj_rsquared
-
-
-
-estimator = KerasRegressor(build_fn=larger_model, epochs=100, batch_size=5, verbose=0)
-results_scaled = cross_val_score(estimator, scaled_X.astype(float), scaled_Y.astype(float), cv=kfold)
-print("Standardized: %.2f (%.2f) MSE" % (results_scaled.mean(), results_scaled.std()))
+#Mean Squared Error
+MSE = np.square(np.subtract(Y_test.astype('float64'), y_pred)).mean()
+# perform permutation importance
+results = permutation_importance(model, X_train, Y_train, scoring='neg_mean_squared_error')
+# get importance
+importance = results.importances_mean
+# summarize feature importance
+for i,v in enumerate(importance):
+	print('Feature: %0d, Score: %.5f' % (i,v))
+# plot feature importance
+pyplot.bar([x for x in range(len(importance))], importance)
+pyplot.show()

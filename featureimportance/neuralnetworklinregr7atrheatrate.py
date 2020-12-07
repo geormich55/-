@@ -106,6 +106,67 @@ prediction2 = pipeline.predict(X_test.astype(float))
 #print("accuracy is: %.2f" % accuracy_score)
 print("prediction is: %.2f" % prediction2)
 
+y_error = y_test.astype(float) - prediction2.astype(float)
+
+import matplotlib.pyplot as plt
+from sklearn import linear_model
+import numpy as np
+from sklearn.metrics import mean_squared_error, r2_score
+
+p=prediction2.reshape(-1,1)
+print("R2 score : %.2f" % r2_score(y_test, p))
+print("Mean squared error: %.2f" % mean_squared_error(y_test, p))
+
+er = []
+g = 0
+for i in range(len(y_test)):
+     print("actual=", y_test[i], " observed=", p[i])
+     x = (y_test[i] - p[i]) ** 2
+     er.append(x)
+     g = g + x
+
+x = 0
+for i in range(len(er)):
+     x = x + er[i]
+
+print("MSE", x / len(er))
+
+v = np.var(er)
+print("variance", v)
+
+print("average of errors ", np.mean(er))
+
+m = np.mean(y_test)
+print("average of observed values", m)
+
+y = 0
+for i in range(len(y_test)):
+    y = y + ((y_test[i] - m) ** 2)
+
+print("total sum of squares", y)
+print("ẗotal sum of residuals ", g)
+print("r2 calculated", 1 - (g / y))
+
+from sklearn.metrics import r2_score
+r2_score(y_test.astype(float),prediction2.astype(float))
+
+
+print("R2 score : %.2f" % r2_score(y_test, p))
+print("Mean squared error: %.2f" % mean_squared_error(y_test, p))
+
+import numpy as np
+RSS = np.sum((prediction2.astype(float) - y_test.astype(float))**2)
+y_mean = np.mean(y_test.astype(float))
+TSS = np.sum((y_test.astype(float) - y_mean.astype(float))**2)
+R2 = 1 - RSS/TSS
+R2
+
+n=X_test.shape[0]
+p=X_test.shape[1] - 1
+
+adj_rsquared = 1 - (1 - R2) * ((n - 1)/(n-p-1))
+adj_rsquared
+
 scaler = StandardScaler()
 scaled_Y = scaler.fit_transform(Y)
 scaler.mean_

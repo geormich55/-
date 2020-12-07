@@ -84,11 +84,11 @@ print('predicted response:', y_pred, sep='\n')
 prosarmogh=(Y_test-y_pred)/np.std(Y_test-y_pred)
 print('predicted adjustment:', prosarmogh, sep='\n')
 
-for i,v in enumerate(prosarmogh):
-	print('Feature: %0d, Score: %.5f' % (i,v))
+#for i,v in enumerate(prosarmogh):
+	#print('Feature: %0d, Score: %.5f' % (i,v))
 # plot feature importance
-pyplot.bar([x for x in range(len(prosarmogh))], prosarmogh)
-pyplot.show()
+#pyplot.bar([x for x in range(len(prosarmogh))], prosarmogh)
+#pyplot.show()
 
 np.std(X_train)
 scaled_coefficients=model.coef_/np.std(X_train)

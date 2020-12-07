@@ -188,14 +188,6 @@ model.model._formula_max_endog
 
 model.summary()
 
-import matplotlib.pyplot as plt
-x = range(np.shape(selected)[0])
-x_labels=selected
-y=scores
-plt.bar(x,y,color='green',align='center')
-plt.title('rsquared for 1 2 or more features')
-plt.xticks(x,x_labels,rotation='vertical')
-plt.show()
 
 import statsmodels.formula.api as smf
 import statsmodels.api as sm

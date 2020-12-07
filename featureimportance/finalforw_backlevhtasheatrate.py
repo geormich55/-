@@ -46,13 +46,13 @@ for i in range(2905):
 Y1=Y1[Y1!=0]
 Y1=Y1.dropna()
 a=np.shape(I)[0]
-for i in range(2905):
-     for j in range(37):
-         for k in range(a):
-             if i == I[k]:
-                 X1.values[i,j]=0
-X1=X1[X1!=0]
-X1=X1.dropna()
+
+for i in range(np.shape(I)[0]):
+     X1=X1.drop(X1.index[I[np.shape(I)[0]-1-i]])
+
+for i in range(np.shape(X1.columns)[0]):
+     X1[X1.columns[i]]=X1[X1.columns[i]].fillna(np.mean(X1.values[0, i]))
+
 X=X1
 X3 = X1.iloc[:, :].values
 Y = Y1.loc[:, :].values
@@ -127,9 +127,10 @@ print(pvalincluded)
 print('excluded features:')
 print(new_pval)
 
+pvalincluded.remove(worst_pval)
 
 import matplotlib.pyplot as plt
-x = range(3)
+x = range(11)
 x_labels=included
 y=pvalincluded
 plt.bar(x,y,color='green',align='center')
