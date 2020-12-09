@@ -116,7 +116,7 @@ import statsmodels.api as sm
 
 
 import statsmodels.formula.api as smf
-import statsmodels.api as sm
+#import statsmodels.api as sm
 
 
 """Linear model designed by forward selection.
@@ -134,59 +134,59 @@ import statsmodels.api as sm
            selected by forward selection
            evaluated by adjusted R-squared
     """
-remaining = set(X.columns)
-response='HeatRate'
+#remaining = set(X.columns)
+#response='HeatRate'
 #remaining.remove(response)
-selected = []
-scores = []
-current_score, best_new_score = 0.0, 0.0
-i=0
-while i!=35:
-        i=i+1
-        scores_with_candidates = []
-        for candidate in remaining:
-            formula = "{} ~ {} + 1".format(response,' + '.join(selected + [candidate]))
-            X2 = np.append(arr=np.ones((1411, 1)).astype(int), values=X[selected + [candidate]], axis=1)
-            Xp = np.array(X2, dtype=float)
-            Yp = np.array(Y, dtype=float)
-            score = sm.OLS(endog = Yp, exog = Xp).fit().rsquared_adj
-            scores_with_candidates.append((score, candidate))
-        scores_with_candidates.sort()
-        best_new_score, best_candidate = scores_with_candidates.pop()
-        if current_score < best_new_score:
-            remaining.remove(best_candidate)
-            selected.append(best_candidate)
-            scores.append(best_new_score)
-            current_score = best_new_score
-            print('Add  {:30} with rsquared-value {:.6}'.format(best_candidate, best_new_score))
-        else:
-            remaining.remove(best_candidate)
-            selected.append(best_candidate)
-            scores.append(best_new_score)
-            current_score = best_new_score
-            print('Add but not better {:30} with rsquared-value {:.6}'.format(best_candidate, best_new_score))
+#selected = []
+#scores = []
+#current_score, best_new_score = 0.0, 0.0
+#i=0
+#while i!=35:
+        #i=i+1
+        #scores_with_candidates = []
+        #for candidate in remaining:
+            #formula = "{} ~ {} + 1".format(response,' + '.join(selected + [candidate]))
+            #X2 = np.append(arr=np.ones((1411, 1)).astype(int), values=X[selected + [candidate]], axis=1)
+            #Xp = np.array(X2, dtype=float)
+            #Yp = np.array(Y, dtype=float)
+            #score = sm.OLS(endog = Yp, exog = Xp).fit().rsquared_adj
+            #scores_with_candidates.append((score, candidate))
+        #scores_with_candidates.sort()
+        #best_new_score, best_candidate = scores_with_candidates.pop()
+        #if current_score < best_new_score:
+            #remaining.remove(best_candidate)
+            #selected.append(best_candidate)
+            #scores.append(best_new_score)
+            #current_score = best_new_score
+            #print('Add  {:30} with rsquared-value {:.6}'.format(best_candidate, best_new_score))
+        #else:
+            #remaining.remove(best_candidate)
+            #selected.append(best_candidate)
+            #scores.append(best_new_score)
+            #current_score = best_new_score
+            #print('Add but not better {:30} with rsquared-value {:.6}'.format(best_candidate, best_new_score))
 
-formula = "{} ~ {} + 1".format(response,' + '.join(selected))
-X2 = np.append(arr=np.ones((1411, 1)).astype(int), values=X[selected], axis=1)
-Xp = np.array(X2, dtype=float)
-Yp = np.array(Y, dtype=float)
-model = sm.OLS(endog = Yp, exog = Xp).fit()
+#formula = "{} ~ {} + 1".format(response,' + '.join(selected))
+#X2 = np.append(arr=np.ones((1411, 1)).astype(int), values=X[selected], axis=1)
+#Xp = np.array(X2, dtype=float)
+#Yp = np.array(Y, dtype=float)
+#model = sm.OLS(endog = Yp, exog = Xp).fit()
 
 
-a=np.array(datas)[:,[0,1,2,3,4,5,6,7]]
+#a=np.array(datas)[:,[0,1,2,3,4,5,6,7]]
 
-b=pd.DataFrame(a)
+#b=pd.DataFrame(a)
 
-h=pd.to_numeric(datas['HeatRate'])
+#h=pd.to_numeric(datas['HeatRate'])
 
-print(selected)
-print(scores)
+#print(selected)
+#print(scores)
 
-model.rsquared_adj
+#model.rsquared_adj
 
-model.model._formula_max_endog
+#model.model._formula_max_endog
 
-model.summary()
+#model.summary()
 
 
 import statsmodels.formula.api as smf

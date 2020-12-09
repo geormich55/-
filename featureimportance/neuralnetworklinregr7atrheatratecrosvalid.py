@@ -83,9 +83,9 @@ pipeline = Pipeline(estimators)
 kfold = KFold(n_splits=10, random_state=seed)
 results = cross_val_score(pipeline, X.astype(float), Y.astype(float), cv=kfold)
 print("Standardized: %.2f (%.2f) MSE" % (results.mean(), results.std()))
-estimator = KerasRegressor(build_fn=larger_model, epochs=100, batch_size=5, verbose=0)
-results2 = cross_val_score(estimator, X.astype(float), Y.astype(float), cv=kfold)
-print("Baseline: %.2f (%.2f) MSE" % (results2.mean(), results2.std()))
+#estimator = KerasRegressor(build_fn=larger_model, epochs=100, batch_size=5, verbose=0)
+#results2 = cross_val_score(estimator, X.astype(float), Y.astype(float), cv=kfold)
+#print("Baseline: %.2f (%.2f) MSE" % (results2.mean(), results2.std()))
 
 scaler = StandardScaler()
 scaled_Y = scaler.fit_transform(Y)
@@ -95,6 +95,10 @@ scaled_X = scaler1.fit_transform(X1)
 scaler1.mean_
 scx=pd.DataFrame(scaled_X,columns=X1.columns)
 scy=pd.DataFrame(scaled_Y,columns=Y1.columns)
+
+#estimator = KerasRegressor(build_fn=larger_model, epochs=100, batch_size=5, verbose=0)
+#results_scaled = cross_val_score(estimator, scaled_X.astype(float), scaled_Y.astype(float), cv=kfold)
+#print("Standardized: %.2f (%.2f) MSE" % (results_scaled.mean(), results_scaled.std()))
 
 
 pipeline.fit(X.astype(float), Y.astype(float))
@@ -148,8 +152,8 @@ from sklearn.metrics import r2_score
 r2_score(y_test.astype(float),prediction2.astype(float))
 
 
-print("R2 score : %.2f" % r2_score(y_test, p))
-print("Mean squared error: %.2f" % mean_squared_error(y_test, p))
+#print("R2 score : %.2f" % r2_score(y_test, p))
+#print("Mean squared error: %.2f" % mean_squared_error(y_test, p))
 
 import numpy as np
 RSS = np.sum((prediction2.astype(float) - y_test.astype(float))**2)
@@ -166,6 +170,4 @@ adj_rsquared
 
 
 
-estimator = KerasRegressor(build_fn=larger_model, epochs=100, batch_size=5, verbose=0)
-results_scaled = cross_val_score(estimator, scaled_X.astype(float), scaled_Y.astype(float), cv=kfold)
-print("Standardized: %.2f (%.2f) MSE" % (results_scaled.mean(), results_scaled.std()))
+

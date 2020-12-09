@@ -140,9 +140,9 @@ plt.show()
 
 
 
-initial_list=[]
-threshold_in=0.9
-threshold_out = 0.9
+#initial_list=[]
+#threshold_in=0.9
+#threshold_out = 0.9
 """ Perform a forward-backward feature selection
     based on p-value from statsmodels.api.OLS
     Arguments:
@@ -156,63 +156,63 @@ threshold_out = 0.9
     Always set threshold_in < threshold_out to avoid infinite looping.
     See https://en.wikipedia.org/wiki/Stepwise_regression for the details
     """
-included = list(initial_list)
-pvalincluded = []
-while True:
-        changed=False
+#included = list(initial_list)
+#pvalincluded = []
+#while True:
+        #changed=False
         # forward step
-        excluded = list(set(X.columns)-set(included))
-        new_pval = pd.Series(index=excluded)
-        for new_column in excluded:
-            b=sm.add_constant(pd.DataFrame(X[included+[new_column]]))
-            model = sm.OLS(y, b.astype(float)).fit()
-            new_pval[new_column] = model.pvalues[new_column]
-        best_pval = new_pval.min()
-        if best_pval < threshold_in:
-             best_feature = new_pval.index[new_pval.argmin()]
-             included.append(best_feature)
-             pvalincluded.append(best_pval)
-             changed=True
-             if True:
-                print('Add  {:30} with p-value {:.6}'.format(best_feature, best_pval))
+        #excluded = list(set(X.columns)-set(included))
+        #new_pval = pd.Series(index=excluded)
+        #for new_column in excluded:
+            #b=sm.add_constant(pd.DataFrame(X[included+[new_column]]))
+            #model = sm.OLS(y, b.astype(float)).fit()
+            #new_pval[new_column] = model.pvalues[new_column]
+        #best_pval = new_pval.min()
+        #if best_pval < threshold_in:
+             #best_feature = new_pval.index[new_pval.argmin()]
+             #included.append(best_feature)
+             #pvalincluded.append(best_pval)
+             #changed=True
+             #if True:
+                #print('Add  {:30} with p-value {:.6}'.format(best_feature, best_pval))
 
 
         # backward step
-        a=sm.add_constant(pd.DataFrame(X[included]))
-        model = sm.OLS(y, a.astype(float)).fit()
+        #a=sm.add_constant(pd.DataFrame(X[included]))
+        #model = sm.OLS(y, a.astype(float)).fit()
         # use all coefs except intercept
-        pvalues = model.pvalues.iloc[1:]
-        worst_pval = pvalues.max() # null if pvalues is empty
-        if worst_pval > threshold_out:
-            changed=True
-            worst_feature = pvalues.index[pvalues.argmax()]
-            included.remove(worst_feature)
-            if True:
-                print('Drop {:30} with p-value {:.6}'.format(worst_feature, worst_pval))
+        #pvalues = model.pvalues.iloc[1:]
+        #worst_pval = pvalues.max() # null if pvalues is empty
+        #if worst_pval > threshold_out:
+            #changed=True
+            #worst_feature = pvalues.index[pvalues.argmax()]
+            #included.remove(worst_feature)
+            #if True:
+                #print('Drop {:30} with p-value {:.6}'.format(worst_feature, worst_pval))
 
-        if not changed:
-            break
+        #if not changed:
+            #break
 
-print('resulting features:')
-print(included)
-print(('included p-values'))
-print(pvalincluded)
-print('excluded features and p-values:')
-print(new_pval)
+#print('resulting features:')
+#print(included)
+#print(('included p-values'))
+#print(pvalincluded)
+#print('excluded features and p-values:')
+#print(new_pval)
 
-import matplotlib.pyplot as plt
-x = range(37)
-x_labels=included
-y=pvalincluded
-plt.bar(x,y,color='green',align='center')
-plt.title('pval for 37 features')
-plt.xticks(x,x_labels,rotation='vertical')
-plt.show()
+#import matplotlib.pyplot as plt
+#x = range(37)
+#x_labels=included
+#y=pvalincluded
+#plt.bar(x,y,color='green',align='center')
+#plt.title('pval for 37 features')
+#plt.xticks(x,x_labels,rotation='vertical')
+#plt.show()
 
-scaler = StandardScaler()
-scaled_Y = scaler.fit_transform(Y)
-scaler1 = StandardScaler()
-scaled_X = scaler1.fit_transform(X1)
-scx=pd.DataFrame(scaled_X,columns=X1.columns)
-scy=pd.DataFrame(scaled_Y,columns=Y1.columns)
+#scaler = StandardScaler()
+#scaled_Y = scaler.fit_transform(Y)
+#scaler1 = StandardScaler()
+#scaled_X = scaler1.fit_transform(X1)
+#scx=pd.DataFrame(scaled_X,columns=X1.columns)
+#scy=pd.DataFrame(scaled_Y,columns=Y1.columns)
 
